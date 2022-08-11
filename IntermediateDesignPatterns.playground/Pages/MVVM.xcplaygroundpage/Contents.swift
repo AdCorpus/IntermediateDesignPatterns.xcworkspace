@@ -75,5 +75,69 @@ public class PetViewModel {
             return "$500.00"
         }
     }
-    
 }
+
+extension PetViewModel {
+    public func configure(_ view: PetView) {
+        view.nameLabel.text = name
+        view.imageView.image = image
+        view.ageLabel.text = ageText
+        view.adoptionFeeLabel.text = adoptionFee
+    }
+}
+
+// MARK: - View
+public class PetView: UIView {
+    public let imageView: UIImageView
+    public let nameLabel: UILabel
+    public let ageLabel: UILabel
+    public let adoptionFeeLabel: UILabel
+    
+    public override init(frame: CGRect) {
+        var childFrame = CGRect(x: 0, y: 16, width: frame.width, height: frame.height / 2)
+        imageView = UIImageView(frame: childFrame)
+        imageView.contentMode = .scaleAspectFit
+        childFrame.origin.y += childFrame.height + 16.0
+        childFrame.size.height = 30.0
+        nameLabel = UILabel(frame: childFrame)
+        nameLabel.textAlignment = .center
+        
+        childFrame.origin.y += childFrame.height
+        ageLabel = UILabel(frame: childFrame)
+        ageLabel.textAlignment = .center
+        
+        childFrame.origin.y += childFrame.height
+        adoptionFeeLabel = UILabel(frame: childFrame)
+        adoptionFeeLabel.textAlignment = .center
+        
+        super.init(frame: frame)
+        backgroundColor = .white
+        addSubview(imageView)
+        addSubview(nameLabel)
+        addSubview(ageLabel)
+        addSubview(adoptionFeeLabel)
+    }
+    
+    @available(*, unavailable)
+    public required init?(coder: NSCoder) {
+        fatalError("Use init(frame:) instead")
+    }
+}
+
+// MARK: - Example
+let birthday = Date(timeIntervalSinceNow: -2 * 86400 * 366)
+let image = UIImage(named: "stuart")!
+let stuart = Pet(name: "Stuart", birthday: birthday, rarity: .veryRare, image: image)
+
+let viewModel = PetViewModel(pet: stuart)
+
+let frame = CGRect(x: 0.0, y: 0.0, width: 300, height: 420)
+let view = PetView(frame: frame)
+
+viewModel.configure(view)
+//view.nameLabel.text = viewModel.name
+//view.imageView.image = viewModel.image
+//view.ageLabel.text = viewModel.ageText
+//view.adoptionFeeLabel.text = viewModel.adoptionFee
+
+PlaygroundPage.current.liveView = view
